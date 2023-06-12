@@ -1,0 +1,36 @@
+
+header{
+    display: flex;
+    background-color: rgb(67, 105, 255);
+    height: 50px;
+    
+    h1{
+        width: 80%;
+        margin-left: 10%;
+        text-align: center;
+        margin-top: 5px;
+        a{
+            color: white;   
+            text-decoration: none;
+        }
+    }
+    li{
+        display: inline-block;
+        margin: 5px;
+        margin-top: 12px;
+        margin-right: 5px;
+        margin-left: 3px;
+        text-align: right;
+        width: 80px;  
+        a{
+            font-size: large;
+            color: white;   
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+    }
+    
+    li a:hover {
+        color: rgb(239, 193, 109); /* change color on hover */
+    } 
+}
