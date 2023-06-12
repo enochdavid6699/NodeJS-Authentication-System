@@ -1,16 +1,14 @@
+//Require User
 const User = require('../models/user');
-
+//Require bcrypt
 const bcrypt = require('bcrypt');
 
-
-//This is to acces for the deleting of the Avatar
-const fs = require('fs');
-const path = require('path');
 
 //Profile Page
 module.exports.profile = async function (req, res) {
 
     try {
+        ///Finding the User
         let user = await User.findById(req.params.id);
 
         return res.render('user_profile', {
@@ -27,29 +25,38 @@ module.exports.profile = async function (req, res) {
 //Profile Update
 module.exports.update = async function (req, res) {
 
-    if (req.user.id == req.params.id) {
+    //This will update the users information
+    let user = await User.findById(req.params.id);
 
-        if (req.body.password != req.body.confirm_password) {
-            req.flash('error', 'Confirm Password does not match');
-            return res.redirect('back');
+    //Only thw same user can update the Password
+    if (user && req.user.id == req.params.id) {
+
+        //Checking if Old Password is Correct
+        if (await bcrypt.compare(req.body.old_password, user.password)) {
+
+            //Password and Confirm Password should be same
+            if (req.body.password != req.body.confirm_password) {
+                req.flash('error', 'Confirm Password does not match');
+                return res.redirect('back');
+            }
+
+            // Hash the password using bcrypt
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+            //Updating the password
+            user.password = hashedPassword;
+
+            //Saving the changes
+            await user.save();
+
+            //Giving flash message
+            req.flash('success', 'Password Reset Successfully');
+
+            return res.redirect('/');
+
         }
-
-        // Hash the password using bcrypt
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-        //This will update the users information
-        let user = await User.findById(req.params.id);
-
-        //Updating the password
-        user.password = hashedPassword;
-
-        //Saving the changes
-        await user.save();
-
-        //Giving flash message
-        req.flash('success', 'Profile Updated Successfully');
-
-        return res.redirect('back');
+        req.flash('error', 'Incorrect Old Password');
+            return res.redirect('back');
 
     }
 
@@ -84,29 +91,36 @@ module.exports.signIn = function (req, res) {
 
 //Get Sign Up Data
 module.exports.create = async function (req, res) {
+
+    //Password and Confirm Password should be same
     if (req.body.password != req.body.confirm_password) {
         req.flash('error', 'Confirm Password does not match');
         return res.redirect('back');
     }
 
     try {
+
+        //Checking if the user already exists
         const user = await User.findOne({ email: req.body.email });
 
         if (!user) {
 
             // Hash the password using bcrypt
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            
+
             //Updating the password
             req.body.password = hashedPassword;
 
+            //Creating the user
             User.create(req.body);
 
             //Giving flash message
             req.flash('success', 'Sign-Up Successfull');
 
             return res.redirect('/users/sign-in');
+
         } else {
+
             return res.redirect('back');
         }
 
@@ -115,7 +129,7 @@ module.exports.create = async function (req, res) {
         //Giving flash message
         req.flash('error', 'Error in Signing-Up');
 
-        console.log('Error in finding User in Singing Up');
+        console.log(error);
     }
 
 }
@@ -123,6 +137,7 @@ module.exports.create = async function (req, res) {
 //Sign In and create a session for User
 module.exports.createSession = function (req, res) {
 
+    //Everything here is done by passport
     req.flash('success', 'Logged In Successfully');
 
     return res.redirect('/');

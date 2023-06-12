@@ -1,10 +1,13 @@
+//Require Express
 const { request } = require('express');
+//Require Passport
 const passport = require('passport');
+//Require Bcrypt
 const bcrypt = require('bcrypt');
 
-
+// Require Local Strategy
 const LocalStrategy = require('passport-local').Strategy;
-
+//Require User
 const User = require('../models/user');
 
 //Authentication Using Passport (New Way)
@@ -63,4 +66,5 @@ passport.setAuthenticatedUser = function(req , res , next){
     next();
 }
 
+//Exporting passpoert
 module.exports = passport;

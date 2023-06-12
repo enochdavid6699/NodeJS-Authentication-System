@@ -1,10 +1,10 @@
+//Require User
 const User = require('../models/user');
 
+//Loading the Home Page
 module.exports.home = async function( req , res ){
 
     try {
-
-        let users = await User.find({});
 
         return res.render('home', {
           title: "Home"

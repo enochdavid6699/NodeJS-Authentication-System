@@ -1,9 +1,7 @@
+//Require Mongoose
 const mongoose = require('mongoose');
 
-const multer = require('multer');
-const path = require('path');
-const AVATAR_PATH = path.join('/uploads/users/avatars');
-
+//Defining the Schema
 const userSchema = new mongoose.Schema({
     email:{
         type: String,
@@ -24,4 +22,5 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User' , userSchema);
 
+//Exporting the User
 module.exports = User;
