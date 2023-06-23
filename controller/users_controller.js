@@ -4,7 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 
-//Profile Page
+//Update Page
 module.exports.profile = async function (req, res) {
 
     try {
