@@ -71,3 +71,23 @@ select:focus {
   outline: none;
   box-shadow: 0 0 5px #FFD700;
 }
+
+.center-container {
+  display: flex;
+  justify-content: center;
+}
+
+#google {
+  text-align: center;
+  width: 200px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#google:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
